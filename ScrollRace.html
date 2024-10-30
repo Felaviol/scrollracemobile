@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling Race</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .scrollable-container {
+            height: 500px;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+
+        .scrollable {
+            height: 500px;
+            background: linear-gradient(180deg,
+                rgba(255,0,0,1) 0%, rgba(255,154,0,1) 16.6%, rgba(208,222,33,1) 33.3%, 
+                rgba(79,220,74,1) 50%, rgba(63,218,216,1) 66.6%, rgba(47,201,226,1) 83.3%, 
+                rgba(255,0,0,1) 100%);
+            background-size: 100% 100%;
+        }
+
+        #rollingNumber {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="scrollable-container" id="scrollableContainer">
+        <div class="scrollable"></div>
+        <div class="scrollable"></div>
+        <div class="scrollable"></div>
+    </div>
+
+    <div id="rollingNumber">0 m</div>
+
+    <div id="controls">
+        <label for="timeLimit">Enter time limit (seconds): </label>
+        <input type="number" id="timeLimit" min="1" value="5">
+        <button id="startButton">Start Scrolling Race</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        const container = document.getElementById('scrollableContainer');
+        const rollingNumber = document.getElementById('rollingNumber');
+        const result = document.getElementById('result');
+        const startButton = document.getElementById('startButton');
+        const timeLimitInput = document.getElementById('timeLimit');
+
+        let totalScrolledDistance = 0;
+        let isRaceStarted = false;
+        let previousScrollTop = 0;
+
+        startButton.addEventListener('click', () => {
+            const timeLimit = parseInt(timeLimitInput.value, 10) || 5;
+            let countdown = 3;
+            
+            const countdownInterval = setInterval(() => {
+                result.textContent = `Race starts in ${countdown}...`;
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    result.textContent = 'Go!';
+                    container.style.overflowY = 'scroll';
+                    isRaceStarted = true;
+                    totalScrolledDistance = 0;
+                    previousScrollTop = 0;
+
+                    setTimeout(() => {
+                        container.style.overflowY = 'hidden';
+                        isRaceStarted = false;
+                        result.textContent = `Scrolled Distance: ${(totalScrolledDistance / 100).toFixed(2)} m`;
+                    }, timeLimit * 1000);
+                }
+            }, 1000);
+        });
+
+        container.addEventListener('scroll', () => {
+            if (isRaceStarted) {
+                const currentScroll = container.scrollTop;
+                const maxScroll = container.scrollHeight - container.clientHeight;
+
+                if (currentScroll > previousScrollTop) {
+                    totalScrolledDistance += currentScroll - previousScrollTop;
+                }
+
+                previousScrollTop = currentScroll;
+                rollingNumber.textContent = `${(totalScrolledDistance / 100).toFixed(2)} m`;
+
+                if (currentScroll >= maxScroll) {
+                    container.scrollTop = 0;
+                    previousScrollTop = 0;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
