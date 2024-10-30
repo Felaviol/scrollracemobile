@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 16px;
             margin: 0;
+            padding: 5px;
             overflow: hidden;
         }
 
@@ -16,7 +16,8 @@
             height: 75vh;
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
-            width: 100%;
+            width: calc(100% - 10px);
+            margin: 0 5px;
         }
 
         .scrollable {
@@ -28,43 +29,39 @@
             background-size: 100% 100%;
         }
 
-        #nonScrollableArea {
-            border: 5px solid black;
-            padding: 10px;
-        }
-
         #rollingNumber {
             margin-top: 10px;
-            font-weight: bold;
+            font-size: 16px;
         }
 
         #controls {
             margin-top: 20px;
+            font-size: 16px;
         }
 
         #result {
             margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="nonScrollableArea">
-        <div class="scrollable-container" id="scrollableContainer">
-            <div class="scrollable"></div>
-            <div class="scrollable"></div>
-            <div class="scrollable"></div>
-        </div>
-
-        <div id="rollingNumber">0 px</div>
-
-        <div id="controls">
-            <label for="timeLimit">Enter time limit (seconds): </label>
-            <input type="number" id="timeLimit" min="1" value="5">
-            <button id="startButton">Start Scrolling Race</button>
-        </div>
-
-        <div id="result"></div>
+    <div class="scrollable-container" id="scrollableContainer">
+        <div class="scrollable"></div>
+        <div class="scrollable"></div>
+        <div class="scrollable"></div>
     </div>
+
+    <div id="rollingNumber">0 px</div>
+
+    <div id="controls">
+        <label for="timeLimit">Enter time limit (seconds): </label>
+        <input type="number" id="timeLimit" min="1" value="5">
+        <button id="startButton">Start Scrolling Race</button>
+    </div>
+
+    <div id="result"></div>
 
     <script>
         const container = document.getElementById('scrollableContainer');
