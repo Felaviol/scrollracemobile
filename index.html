@@ -8,16 +8,17 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 5px;
             overflow: hidden;
+        }
+
+        .non-scrollable {
+            padding: 5px;
         }
 
         .scrollable-container {
             height: 75vh;
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
-            width: calc(100% - 10px);
-            margin: 0 5px;
         }
 
         .scrollable {
@@ -42,6 +43,9 @@
         #result {
             margin-top: 20px;
             font-size: 16px;
+        }
+
+        #result .bold {
             font-weight: bold;
         }
     </style>
@@ -53,15 +57,17 @@
         <div class="scrollable"></div>
     </div>
 
-    <div id="rollingNumber">0 px</div>
+    <div class="non-scrollable">
+        <div id="rollingNumber">0 <span class="bold">px</span></div>
 
-    <div id="controls">
-        <label for="timeLimit">Enter time limit (seconds): </label>
-        <input type="number" id="timeLimit" min="1" value="5">
-        <button id="startButton">Start Scrolling Race</button>
+        <div id="controls">
+            <label for="timeLimit">Enter time limit (seconds): </label>
+            <input type="number" id="timeLimit" min="1" value="5">
+            <button id="startButton">Start Scrolling Race</button>
+        </div>
+
+        <div id="result"></div>
     </div>
-
-    <div id="result"></div>
 
     <script>
         const container = document.getElementById('scrollableContainer');
@@ -93,7 +99,7 @@
                     setTimeout(() => {
                         container.style.overflowY = 'hidden';
                         isRaceStarted = false;
-                        result.textContent = `Scrolled Distance: ${totalScrolledDistance} px`;
+                        result.innerHTML = `Scrolled Distance: <span class="bold">${totalScrolledDistance} px</span>`;
                     }, timeLimit * 1000);
                 }
             }, 1000);
@@ -109,7 +115,7 @@
                 }
 
                 previousScrollTop = currentScroll;
-                rollingNumber.textContent = `${totalScrolledDistance} px`;
+                rollingNumber.innerHTML = `${totalScrolledDistance} <span class="bold">px</span>`;
 
                 if (currentScroll >= maxScroll) {
                     container.scrollTop = 0;
